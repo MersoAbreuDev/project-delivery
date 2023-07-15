@@ -49,9 +49,7 @@ public class ClienteController {
             @RequestParam("dataFim") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFim,
             @RequestParam("nome") String nome
     ) {
-        // Ajuste as datas para incluir o final do dia
         LocalDate dataFimAjustada = dataFim.plusDays(1);
-
         List<ClienteFilterResponseDTO> filterClientesDTO = clienteService.filterClient(nome, dataInicio, dataFimAjustada);
         return ResponseEntity.ok(filterClientesDTO);
     }
