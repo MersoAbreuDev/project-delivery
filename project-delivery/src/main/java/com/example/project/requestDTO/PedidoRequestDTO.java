@@ -1,17 +1,20 @@
 package com.example.project.requestDTO;
 
+import com.example.project.entity.Cliente;
+import com.example.project.enums.Status;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClienteRequestDTO implements Serializable {
+public class PedidoRequestDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -19,13 +22,9 @@ public class ClienteRequestDTO implements Serializable {
 
     private LocalDate dataCriacao;
 
-    private String nome;
+    private Long codigoPedido;
 
-    private String cpf;
+    private Status status;
 
-    private String telefone;
-
-    private String email;
-
-
+    private Long idCliente;
 }
