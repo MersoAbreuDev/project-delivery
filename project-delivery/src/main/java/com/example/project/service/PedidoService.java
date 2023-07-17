@@ -15,6 +15,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ThreadLocalRandom;
@@ -53,17 +54,19 @@ public class PedidoService {
     }
 
     public List<PedidoResponseDTO> findAllPedidos() {
-        List<PedidoResponseDTO> listaPedidosDTO = this.pedidoRepository.findAll().stream().map(pedido -> {
+        List<Pedido> pedidos = this.pedidoRepository.findAll();
+        List<PedidoResponseDTO> listaPedidosDTO = new ArrayList<>();
+
+        for (Pedido pedido : pedidos) {
             Cliente cliente = pedido.getCliente();
             if (cliente != null) {
                 cliente = clienteRepository.getOne(cliente.getId());
                 ClientePedidoResponseDTO clientePedidoResponseDTO = modelMapper.map(cliente, ClientePedidoResponseDTO.class);
                 PedidoResponseDTO pedidoResponseDTO = modelMapper.map(pedido, PedidoResponseDTO.class);
                 pedidoResponseDTO.setCliente(clientePedidoResponseDTO);
-                return pedidoResponseDTO;
+                listaPedidosDTO.add(pedidoResponseDTO);
             }
-            return null;
-        }).filter(Objects::nonNull).collect(Collectors.toList());
+        }
         return listaPedidosDTO;
     }
 
