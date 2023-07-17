@@ -2,6 +2,8 @@ package com.example.project.service;
 import com.example.project.filters.response.ClienteFilterResponseDTO;
 import com.example.project.handle.request.BadRequestException;
 import com.example.project.handle.response.ObjectNotFoundException;
+import com.example.project.requestDTO.EntregaRequestDTO;
+import com.example.project.responseDTO.EntregaResponseDTO;
 import org.modelmapper.ModelMapper;
 import com.example.project.entity.Cliente;
 import com.example.project.repository.ClienteRepository;
@@ -38,21 +40,6 @@ public class ClienteService {
             return this.modelMapper.map(clientes, ClienteResponseDTO.class);
         }).collect(Collectors.toList());
         return listaClientesDTO;
-    }
-
-    public ClienteResponseDTO update(Long id, ClienteRequestDTO clienteRequestDTO) {
-        return this.clienteRepository.findById(id).map(cliente -> {
-            if (!cliente.getNome().equals(clienteRequestDTO.getNome())) {
-                this.clienteRepository.findByNome(clienteRequestDTO.getNome()).ifPresent(p -> {
-                    throw new BadRequestException("Cliente já cadastrado. ");
-                });
-            }
-            clienteRequestDTO.setId(cliente.getId());
-            cliente = this.modelMapper.map(clienteRequestDTO, Cliente.class);
-            cliente = this.clienteRepository.save(cliente);
-            return this.modelMapper.map(cliente, ClienteResponseDTO.class);
-        }).orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado."));
-
     }
 
     public void delete(Long id) {

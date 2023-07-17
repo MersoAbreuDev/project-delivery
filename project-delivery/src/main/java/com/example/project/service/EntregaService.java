@@ -1,17 +1,22 @@
 package com.example.project.service;
 
+import com.example.project.entity.Cliente;
 import com.example.project.entity.Entrega;
 import com.example.project.entity.Pedido;
 import com.example.project.enums.Status;
 import com.example.project.handle.request.BadRequestException;
+import com.example.project.handle.response.ObjectNotFoundException;
 import com.example.project.repository.EntregaRepository;
 import com.example.project.repository.PedidoRepository;
 import com.example.project.requestDTO.EntregaRequestDTO;
+import com.example.project.responseDTO.ClientePedidoResponseDTO;
 import com.example.project.responseDTO.ClienteResponseDTO;
 import com.example.project.responseDTO.EntregaResponseDTO;
+import com.example.project.responseDTO.PedidoResponseDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -34,8 +39,6 @@ public class EntregaService {
         this.pedidoRepository = pedidoRepository;
     }
 
-
-
     public EntregaResponseDTO salvarEntrega(EntregaRequestDTO entregaRequestDTO) {
         if(Objects.isNull(entregaRequestDTO.getIdPedido())){
             new BadRequestException("Pedido não encontrado");
@@ -50,10 +53,15 @@ public class EntregaService {
         return this.modelMapper.map(entrega, EntregaResponseDTO.class);
     }
 
-    public List<EntregaResponseDTO> listAllEntregas() {
-        List<EntregaResponseDTO> listaEntregas = this.entregaRepository.findAll().stream().map(entregas -> {
-            return this.modelMapper.map(entregas, EntregaResponseDTO.class);
-        }).collect(Collectors.toList());
-        return listaEntregas;
+    public void delete(Long id) {
+        this.entregaRepository.findById(id).ifPresentOrElse(entrega -> {
+            try {
+                this.entregaRepository.delete(entrega);
+            } catch (BadRequestException e) {
+                throw new BadRequestException("Entrega possui pedidos vinculados.");
+            }}, () -> {
+            throw new ObjectNotFoundException("Entrega não encontrado.");
+        });
     }
+
 }

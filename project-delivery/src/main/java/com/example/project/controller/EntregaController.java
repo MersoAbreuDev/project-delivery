@@ -27,8 +27,17 @@ public class EntregaController {
         return ResponseEntity.ok(entregaService.salvarEntrega(entregaRequestDTO));
     }
 
-    @GetMapping
-    public ResponseEntity<List<EntregaResponseDTO>> listAll(){
-        return ResponseEntity.ok(entregaService.listAllEntregas());
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable("id") Long id){
+        this.entregaService.delete(id);
+        return ResponseEntity.noContent().build();
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<EntregaResponseDTO> update(@PathVariable("id") Long id,
+                                                     @RequestBody EntregaRequestDTO entregaRequestDTO){
+        return ResponseEntity.ok(this.entregaService.update(id, entregaRequestDTO));
+    }
+
+
 }
