@@ -1,7 +1,7 @@
 package com.example.project.entity;
 
 import com.example.project.enums.Status;
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.example.project.enums.StatusEntrega;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,32 +10,31 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
-@Data
+@Entity
 @AllArgsConstructor
 @NoArgsConstructor
-@Entity
-@Table(name = "tb_pedido")
-public class Pedido implements Serializable {
+@Data
+@Table(name = "tb_entrega")
+public class Entrega implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    private Status statusEntrega;
+
+    private String observacao;
+
+
+    @OneToMany(mappedBy = "entrega")
+    private List<Pedido> pedidos;
+
     @CreationTimestamp
-    private LocalDate dataCriacao;
+    private LocalDate dataEntrega;
 
-    private Long codigoPedido;
 
-    private Status status;
-
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "cliente")
-    private Cliente cliente;
-
-    @ManyToOne
-    @JoinColumn(name = "entrega_id")
-    private Entrega entrega;
 }
