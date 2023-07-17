@@ -24,7 +24,7 @@ public class EntregaResponseDTO implements Serializable {
 
     private String observacao;
 
-    private Pedido pedido;
+    private PedidoResponseDTO pedidoResponseDTO;
 
     private LocalDate dataEntrega;
 }
