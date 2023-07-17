@@ -1,5 +1,6 @@
 package com.example.project.service;
 
+import com.example.project.entity.Cliente;
 import com.example.project.entity.Entrega;
 import com.example.project.entity.Pedido;
 import com.example.project.enums.Status;
@@ -7,8 +8,10 @@ import com.example.project.handle.request.BadRequestException;
 import com.example.project.repository.EntregaRepository;
 import com.example.project.repository.PedidoRepository;
 import com.example.project.requestDTO.EntregaRequestDTO;
+import com.example.project.responseDTO.ClientePedidoResponseDTO;
 import com.example.project.responseDTO.ClienteResponseDTO;
 import com.example.project.responseDTO.EntregaResponseDTO;
+import com.example.project.responseDTO.PedidoResponseDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
@@ -50,10 +53,8 @@ public class EntregaService {
         return this.modelMapper.map(entrega, EntregaResponseDTO.class);
     }
 
-    public List<EntregaResponseDTO> listAllEntregas() {
-        List<EntregaResponseDTO> listaEntregas = this.entregaRepository.findAll().stream().map(entregas -> {
-            return this.modelMapper.map(entregas, EntregaResponseDTO.class);
-        }).collect(Collectors.toList());
-        return listaEntregas;
+    public List<EntregaResponseDTO> findAllPedidos() {
+        return null;
     }
+
 }
