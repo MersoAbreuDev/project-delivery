@@ -62,6 +62,36 @@ public class EntregaService {
             }}, () -> {
             throw new ObjectNotFoundException("Entrega não encontrado.");
         });
+
     }
+
+    public List<EntregaResponseDTO> findAll() {
+        List<EntregaResponseDTO> listaEntregaDTO = this.entregaRepository.findAll().stream().map(entrega -> {
+            PedidoResponseDTO pedidoDTO = new PedidoResponseDTO();
+            for(Pedido pedido : entrega.getPedidos()) {
+                ClientePedidoResponseDTO clienteDTO = new ClientePedidoResponseDTO();
+                clienteDTO.setId(pedido.getCliente().getId());
+                clienteDTO.setNome(pedido.getCliente().getNome());
+                clienteDTO.setCpf(pedido.getCliente().getCpf());
+                clienteDTO.setTelefone(pedido.getCliente().getTelefone());
+                clienteDTO.setNome(pedido.getCliente().getEmail());
+
+                pedidoDTO.setId(pedido.getId());
+                pedidoDTO.setCodigoPedido(pedido.getCodigoPedido());
+                pedidoDTO.setStatus(pedido.getStatus());
+                pedidoDTO.setCliente(clienteDTO);
+            }
+
+            EntregaResponseDTO entregaResponseDTO = this.modelMapper.map(entrega, EntregaResponseDTO.class);
+            entregaResponseDTO.setPedidoResponseDTO(pedidoDTO);
+            return entregaResponseDTO;
+        }).collect(Collectors.toList());
+        return listaEntregaDTO;
+    }
+
+
+
+
+
 
 }

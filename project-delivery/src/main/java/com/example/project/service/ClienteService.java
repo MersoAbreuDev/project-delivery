@@ -42,6 +42,21 @@ public class ClienteService {
         return listaClientesDTO;
     }
 
+    public ClienteResponseDTO update(Long id, ClienteRequestDTO clienteRequestDTO) {
+        return this.clienteRepository.findById(id).map(cliente -> {
+            if (!equals(clienteRequestDTO.getId())) {
+                this.clienteRepository.findByNome(clienteRequestDTO.getNome()).ifPresent(p -> {
+                    throw new BadRequestException("Cliente já cadastrado. ");
+                });
+            }
+            clienteRequestDTO.setId(cliente.getId());
+            cliente = this.modelMapper.map(clienteRequestDTO, Cliente.class);
+            cliente = this.clienteRepository.save(cliente);
+            return this.modelMapper.map(cliente, ClienteResponseDTO.class);
+        }).orElseThrow(() -> new ObjectNotFoundException("Cliente não encontrado."));
+
+    }
+
     public void delete(Long id) {
         this.clienteRepository.findById(id).ifPresentOrElse(cliente -> {
             try {

@@ -22,6 +22,10 @@ public class EntregaController {
         this.entregaRepository = entregaRepository;
     }
 
+    @GetMapping
+    public ResponseEntity<List<EntregaResponseDTO>> listAll (){
+        return ResponseEntity.ok(this.entregaService.findAll());
+    }
     @PostMapping
     public ResponseEntity<EntregaResponseDTO> salvar(@RequestBody EntregaRequestDTO entregaRequestDTO) {
         return ResponseEntity.ok(entregaService.salvarEntrega(entregaRequestDTO));
@@ -32,12 +36,5 @@ public class EntregaController {
         this.entregaService.delete(id);
         return ResponseEntity.noContent().build();
     }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<EntregaResponseDTO> update(@PathVariable("id") Long id,
-                                                     @RequestBody EntregaRequestDTO entregaRequestDTO){
-        return ResponseEntity.ok(this.entregaService.update(id, entregaRequestDTO));
-    }
-
 
 }
